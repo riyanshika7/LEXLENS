@@ -5,40 +5,46 @@ export default {
   theme: {
     extend: {
       colors: {
-        legal: {
-          50: '#f6f8fa',
-          100: '#edf2f7',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
+        canvas: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          800: '#0f172a',
+          900: '#0a0f1d',
+          950: '#030712',
         },
-        navy: {
-          800: '#0a192f',
-          900: '#030712',
-          950: '#02040a',
+        surface: {
+          dark: '#0e1726',
+          darker: '#090d16',
+          card: '#111c30',
+          border: '#1e293b',
+          'border-subtle': '#182234',
         },
-        gold: {
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
+        brand: {
+          50: '#eff6ff',
+          100: '#dbeafe',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
         },
-        verdict: {
-          blue: '#2563eb',
-          amber: '#d97706',
-          emerald: '#059669',
-          rose: '#e11d48',
+        semantic: {
+          success: '#10b981',
+          warning: '#f59e0b',
+          danger: '#ef4444',
+          info: '#3b82f6',
+          purple: '#8b5cf6',
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['Merriweather', 'Georgia', 'serif'],
+        serif: ['Merriweather', 'Georgia', 'Cambria', 'serif'],
         mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+      },
+      boxShadow: {
+        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'elevated': '0 4px 20px -2px rgba(0, 0, 0, 0.35)',
+        'panel': '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
       },
     },
   },

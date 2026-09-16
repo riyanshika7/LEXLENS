@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Scale,
+  Globe,
+  Upload,
+  Menu,
+  X,
   FileText,
   GitCompare,
   FlaskConical,
-  ShieldCheck,
-  Globe,
 } from 'lucide-react';
 import { A11yToolbar } from './A11yToolbar';
 
@@ -16,14 +17,26 @@ interface NavbarProps {
   setCountry: (c: string) => void;
   state: string;
   setState: (s: string) => void;
-  onOpenDisclaimer: () => void;
+  onOpenUpload: () => void;
   highContrast: boolean;
   fontSize: 'sm' | 'md' | 'lg';
   plainLanguageMode: boolean;
   onToggleContrast: () => void;
   onChangeFontSize: (s: 'sm' | 'md' | 'lg') => void;
   onTogglePlainLanguage: () => void;
+  hasActiveDocument: boolean;
 }
+
+const NAV_LINKS = [
+  { label: 'Product', href: '#hero-section' },
+  { label: 'How It Works', href: '#workflow-section' },
+  { label: 'Features', href: '#features-section' },
+  { label: 'Evidence', href: '#evidence-section' },
+  { label: 'Technology', href: '#technology-section' },
+  { label: 'Security', href: '#security-section' },
+  { label: 'Accessibility', href: '#accessibility-section' },
+  { label: 'Sandbox', href: '#sandbox-section' },
+];
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
@@ -32,127 +45,265 @@ export const Navbar: React.FC<NavbarProps> = ({
   setCountry,
   state,
   setState,
-  onOpenDisclaimer,
+  onOpenUpload,
   highContrast,
   fontSize,
   plainLanguageMode,
   onToggleContrast,
   onChangeFontSize,
   onTogglePlainLanguage,
+  hasActiveDocument,
 }) => {
+  const [activeSection, setActiveSection] = useState<string>('hero-section');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+
+  // IntersectionObserver for tracking currently active landing section
+  useEffect(() => {
+    const handleObserver = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0.1,
+    });
+
+    NAV_LINKS.forEach((link) => {
+      const id = link.href.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleNavClick = (href: string) => {
+    setMobileMenuOpen(false);
+    if (activeTab !== 'workspace' || hasActiveDocument) {
+      setActiveTab('workspace');
+      // Delay slightly if transitioning from another tab
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    } else {
+      const el = document.querySelector(href);
+      el?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <header className="border-b border-slate-800 bg-slate-950/95 backdrop-blur sticky top-0 z-40">
+    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
-          {/* Logo & Tagline */}
+        <div className="flex items-center justify-between h-14 gap-2 sm:gap-4">
+          {/* Brand Wordmark with Minimal Geometric Lens Icon */}
           <div className="flex items-center gap-3 shrink-0">
-            <div className="p-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg text-white shadow-lg shadow-blue-500/20">
-              <Scale className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-lg text-white tracking-tight">LEXLENS</span>
-                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-blue-900/60 text-blue-300 border border-blue-700/50 rounded">
-                  Legal AI
+            <a
+              href="#hero-section"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick('#hero-section');
+              }}
+              className="flex items-center gap-2.5 text-white group"
+              aria-label="LexLens Home"
+            >
+              {/* Minimal geometric lens icon */}
+              <div className="w-7 h-7 rounded-md bg-blue-600 flex items-center justify-center shadow-sm group-hover:bg-blue-500 transition-colors">
+                <svg
+                  className="w-4 h-4 text-white"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  <path d="M11 8v6M8 11h6" strokeWidth="2" strokeOpacity="0.8" />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-sm tracking-tight text-white leading-none">
+                  LEXLENS
+                </span>
+                <span className="text-[10px] text-slate-400 font-mono tracking-wider leading-tight">
+                  INTELLIGENCE
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">
-                Understand the document. Know your options. Prepare smarter.
-              </p>
-            </div>
+            </a>
           </div>
 
-          {/* Navigation Tabs */}
-          <nav className="flex items-center space-x-1" aria-label="Main Navigation">
-            <button
-              onClick={() => setActiveTab('workspace')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                activeTab === 'workspace'
-                  ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              <span>Workspace</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('compare')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                activeTab === 'compare'
-                  ? 'bg-blue-600/20 text-blue-400 border border-blue-500/40'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <GitCompare className="w-4 h-4" />
-              <span>Compare Versions</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('sandbox')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                activeTab === 'sandbox'
-                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <FlaskConical className="w-4 h-4" />
-              <span>Jury Sandbox</span>
-            </button>
+          {/* Center Navigation Links (Visible on Large Screens) */}
+          <nav
+            className="hidden xl:flex items-center space-x-0.5 text-xs font-medium text-slate-300"
+            aria-label="Section Navigation"
+          >
+            {NAV_LINKS.map((link) => {
+              const sectionId = link.href.replace('#', '');
+              const isActive = activeSection === sectionId;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.href);
+                  }}
+                  className={`px-2.5 py-1.5 rounded-md transition-colors ${
+                    isActive
+                      ? 'text-white bg-slate-800 font-semibold'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </nav>
 
-          {/* Right Controls: Jurisdiction & Accessibility */}
-          <div className="flex items-center gap-2">
-            {/* Jurisdiction Picker */}
-            <div className="hidden md:flex items-center gap-1.5 bg-slate-900 border border-slate-700/80 rounded-lg px-2.5 py-1 text-xs">
-              <Globe className="w-3.5 h-3.5 text-blue-400" />
+          {/* Right Action Controls: Workspace Switcher, Jurisdiction, A11y, CTAs */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* View Switchers */}
+            <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">
+              <button
+                onClick={() => setActiveTab('workspace')}
+                title="Document Workspace"
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                  activeTab === 'workspace'
+                    ? 'bg-blue-600 text-white font-medium shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Workspace</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('compare')}
+                title="Version Comparator"
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                  activeTab === 'compare'
+                    ? 'bg-blue-600 text-white font-medium shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <GitCompare className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Compare</span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('sandbox')}
+                title="Evaluator Sandbox"
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                  activeTab === 'sandbox'
+                    ? 'bg-amber-600 text-white font-medium shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <FlaskConical className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Sandbox</span>
+              </button>
+            </div>
+
+            {/* Jurisdiction Dropdown (Compact) */}
+            <div className="hidden lg:flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-300">
+              <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <select
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
-                aria-label="Select Country Jurisdiction"
+                aria-label="Country Jurisdiction"
                 className="bg-transparent text-slate-200 text-xs focus:outline-none cursor-pointer"
               >
-                <option value="United States" className="bg-slate-900">United States</option>
-                <option value="United Kingdom" className="bg-slate-900">United Kingdom</option>
-                <option value="Canada" className="bg-slate-900">Canada</option>
-                <option value="Australia" className="bg-slate-900">Australia</option>
-                <option value="International" className="bg-slate-900">International / General</option>
+                <option value="United States" className="bg-slate-900">US</option>
+                <option value="United Kingdom" className="bg-slate-900">UK</option>
+                <option value="Canada" className="bg-slate-900">CA</option>
+                <option value="Australia" className="bg-slate-900">AU</option>
+                <option value="International" className="bg-slate-900">INTL</option>
               </select>
               <span className="text-slate-600">/</span>
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
-                aria-label="Select State or Province"
+                aria-label="State or Province"
                 className="bg-transparent text-slate-300 text-xs focus:outline-none cursor-pointer"
               >
-                <option value="New York" className="bg-slate-900">New York</option>
-                <option value="California" className="bg-slate-900">California</option>
-                <option value="Delaware" className="bg-slate-900">Delaware</option>
-                <option value="Texas" className="bg-slate-900">Texas</option>
-                <option value="General" className="bg-slate-900">General State Law</option>
+                <option value="New York" className="bg-slate-900">NY</option>
+                <option value="California" className="bg-slate-900">CA</option>
+                <option value="Delaware" className="bg-slate-900">DE</option>
+                <option value="General" className="bg-slate-900">Gen</option>
               </select>
             </div>
 
-            {/* Accessibility Controls */}
-            <A11yToolbar
-              highContrast={highContrast}
-              fontSize={fontSize}
-              plainLanguageMode={plainLanguageMode}
-              onToggleContrast={onToggleContrast}
-              onChangeFontSize={onChangeFontSize}
-              onTogglePlainLanguage={onTogglePlainLanguage}
-            />
+            {/* Accessibility Controls Toolbar */}
+            <div className="hidden sm:block">
+              <A11yToolbar
+                highContrast={highContrast}
+                fontSize={fontSize}
+                plainLanguageMode={plainLanguageMode}
+                onToggleContrast={onToggleContrast}
+                onChangeFontSize={onChangeFontSize}
+                onTogglePlainLanguage={onTogglePlainLanguage}
+              />
+            </div>
 
-            {/* Legal Safety Trigger */}
+            {/* Primary Action CTA */}
             <button
-              onClick={onOpenDisclaimer}
-              title="View Legal Safety Disclaimer"
-              aria-label="Open legal safety disclaimer"
-              className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-1 text-xs"
+              onClick={onOpenUpload}
+              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow transition-colors flex items-center gap-1.5"
             >
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span className="hidden lg:inline text-[11px] text-slate-400">Disclaimer</span>
+              <Upload className="w-3.5 h-3.5" />
+              <span>Analyze</span>
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="xl:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="xl:hidden py-3 border-t border-slate-800 space-y-2 animate-fade-in text-xs">
+            <div className="grid grid-cols-2 gap-1 pb-2 border-b border-slate-800/80">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.href);
+                  }}
+                  className="px-3 py-2 rounded text-slate-300 hover:bg-slate-800 hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            {/* Mobile A11y & Jurisdiction */}
+            <div className="pt-2 flex flex-col gap-2">
+              <A11yToolbar
+                highContrast={highContrast}
+                fontSize={fontSize}
+                plainLanguageMode={plainLanguageMode}
+                onToggleContrast={onToggleContrast}
+                onChangeFontSize={onChangeFontSize}
+                onTogglePlainLanguage={onTogglePlainLanguage}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

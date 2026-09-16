@@ -4,39 +4,67 @@
 
 @layer base {
   :root {
-    --bg-primary: #0a0f1d;
-    --bg-surface: #131b2e;
-    --border-color: #1e293b;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    --color-bg: #030712;
+    --color-surface: #0a0f1d;
+    --color-surface-elevated: #111c30;
+    --color-border: #1e293b;
+    --color-border-subtle: #162032;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #64748b;
+    --color-accent: #2563eb;
+    --color-accent-hover: #1d4ed8;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   /* Accessible high-contrast mode */
   .high-contrast {
-    --bg-primary: #000000;
-    --bg-surface: #0a0a0a;
-    --border-color: #ffffff;
-    --text-primary: #ffffff;
-    --text-secondary: #e2e8f0;
+    --color-bg: #000000;
+    --color-surface: #0a0a0a;
+    --color-surface-elevated: #141414;
+    --color-border: #ffffff;
+    --color-border-subtle: #cccccc;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #f1f5f9;
+    --color-text-muted: #cbd5e1;
+    --color-accent: #38bdf8;
   }
 
-  /* Accessible focus indicators */
+  /* Accessible focus rings */
   *:focus-visible {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
   }
 }
 
-/* Custom sleek scrollbars */
+/* Smooth transition for theme & highlight */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Editorial legal document text styling */
+.document-prose {
+  font-family: 'Merriweather', Georgia, Cambria, serif;
+  line-height: 1.8;
+  letter-spacing: -0.01em;
+}
+
+/* Subtle sleek scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: rgba(3, 7, 18, 0.7);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(71, 85, 105, 0.6);
+  background: rgba(51, 65, 85, 0.6);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -45,16 +73,16 @@
 
 /* Font size modes */
 body.font-size-sm {
-  font-size: 14px;
+  font-size: 13px;
 }
 body.font-size-md {
-  font-size: 16px;
+  font-size: 15px;
 }
 body.font-size-lg {
-  font-size: 18px;
+  font-size: 17px;
 }
 
-/* High contrast mode overrides */
+/* High contrast overrides */
 .high-contrast body {
   background-color: #000000 !important;
   color: #ffffff !important;
@@ -66,13 +94,25 @@ body.font-size-lg {
   border-color: #ffffff !important;
 }
 
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Print styles for Lawyer Preparation Brief */
 @media print {
   body {
     background: white !important;
     color: black !important;
   }
-  nav, footer, .no-print, button, .chat-panel {
+  header, nav, footer, .no-print, button, input, select {
     display: none !important;
   }
   .print-only {
@@ -80,7 +120,7 @@ body.font-size-lg {
   }
   .printable-card {
     page-break-inside: avoid;
-    border: 1px solid #cbd5e1 !important;
+    border: 1px solid #94a3b8 !important;
     color: black !important;
     background: white !important;
   }

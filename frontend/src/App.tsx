@@ -154,13 +154,20 @@ export const App: React.FC = () => {
         setCountry={setCountry}
         state={state}
         setState={setState}
-        onOpenDisclaimer={() => setIsDisclaimerOpen(true)}
+        onOpenUpload={() => {
+          const input = document.createElement('input');
+          input.type = 'file';
+          input.accept = '.pdf,.docx,.txt';
+          input.onchange = (e) => handleFileUpload(e as any);
+          input.click();
+        }}
         highContrast={highContrast}
         fontSize={fontSize}
         plainLanguageMode={plainLanguageMode}
         onToggleContrast={() => setHighContrast(!highContrast)}
         onChangeFontSize={setFontSize}
         onTogglePlainLanguage={() => setPlainLanguageMode(!plainLanguageMode)}
+        hasActiveDocument={!!activeAnalysis}
       />
 
       {/* Main View Area */}
@@ -177,6 +184,7 @@ export const App: React.FC = () => {
             }}
             onSelectBenchmark={handleLoadBenchmark}
             onOpenDisclaimer={() => setIsDisclaimerOpen(true)}
+            onNavigateToTab={setActiveTab}
           />
         )}
 
