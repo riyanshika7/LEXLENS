@@ -58,95 +58,61 @@ BENCHMARK_CATALOG: List[BenchmarkDoc] = [
             "How long do confidentiality obligations last?",
             "What information is excluded from confidentiality?",
             "What happens to materials upon contract termination?",
-        ],
-    ),
-    BenchmarkDoc(
-        benchmark_id="bench_employment_v1",
-        title="Executive Employment Agreement (Version 1 - Baseline)",
-        category="Employment & Severance",
-        description="Original employment contract with $160,000 base salary, 30 days termination notice, and 6 months non-solicit.",
-        filename="employment_agreement_v1.txt",
-        sample_questions=[
-            "What is the base salary and vacation entitlement?",
-            "What is the notice period for termination?",
-            "Is there a non-competition clause?",
-        ],
-    ),
-    BenchmarkDoc(
-        benchmark_id="bench_employment_v2",
-        title="Executive Employment Agreement (Version 2 - Revised)",
-        category="Employment & Severance",
-        description="Revised contract proposal with $185,000 base salary, 14 days termination notice, 12 months non-compete, and employee indemnification.",
-        filename="employment_agreement_v2.txt",
-        sample_questions=[
-            "What is the revised base salary?",
-            "What restrictive covenants have been added?",
-            "What is the new notice period for termination?",
-        ],
-    ),
-    BenchmarkDoc(
-        benchmark_id="bench_edge_no_dates",
-        title="Edge Case: Document Missing Explicit Dates & Parties",
-        category="Edge Case Resilience",
-        description="A vague terms of service document lacking explicit calendar dates and specific party names, demonstrating graceful AI fallback.",
-        filename="edge_case_no_dates.txt",
-        sample_questions=[
-            "When does this agreement expire?",
-            "Who are the named parties?",
-            "What are the termination conditions?",
+            "What remedies exist if a breach occurs?",
         ],
     ),
 ]
 
 
 @router.get("/benchmarks", response_model=List[BenchmarkDoc])
-async def list_benchmarks():
-    """List available pre-configured real legal benchmark documents."""
+async def list_sandbox_benchmarks():
+    """Returns curated benchmark documents available for instant testing."""
     return BENCHMARK_CATALOG
 
 
 @router.post("/run", response_model=SandboxRunResponse)
-async def run_benchmark(req: SandboxRunRequest):
-    """
-    Execute end-to-end processing of a benchmark legal document.
-    Outputs comprehensive diagnostics (timing, chunk count, clause count, sample answers).
-    """
+async def run_sandbox_benchmark(req: SandboxRunRequest):
+    """Execute live pipeline benchmark on curated real-world legal contract."""
     bench = next((b for b in BENCHMARK_CATALOG if b.benchmark_id == req.benchmark_id), None)
     if not bench:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Benchmark ID '{req.benchmark_id}' not found.",
+            detail=f"Benchmark '{req.benchmark_id}' not found.",
         )
 
     file_path = settings.SAMPLE_DATA_DIR / bench.filename
     if not file_path.exists():
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Benchmark file '{bench.filename}' is missing from server storage.",
+            detail=f"Sample file '{bench.filename}' is missing from backend/sample_data.",
         )
 
-    content = file_path.read_bytes()
+    try:
+        content = file_path.read_bytes()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unable to read benchmark file: {str(e)}",
+        )
+
     doc_id = f"sandbox_{bench.benchmark_id}_{uuid.uuid4().hex[:6]}"
 
-    # Time Parsing
     t0 = time.perf_counter()
     doc_content = DocumentParser.parse_document(
         content=content,
         filename=bench.filename,
-        ext=Path(bench.filename).suffix,
+        ext=".txt",
         doc_id=doc_id,
         jurisdiction_country="United States",
-        jurisdiction_state="New York" if "lease" in bench.benchmark_id else "California",
+        jurisdiction_state="California" if "contractor" in bench.benchmark_id else ("New York" if "lease" in bench.benchmark_id else "Delaware"),
     )
     t_parse = (time.perf_counter() - t0) * 1000
 
-    # Save to store
     doc_store.save_document(doc_content)
     retriever = doc_store.get_retriever(doc_id)
 
-    # Time Analysis
     t1 = time.perf_counter()
-    summary, clauses, obligations, deadlines, concerns = ai_service.analyze_document(doc_content)
+    summary, clauses, obligations, deadlines, concerns, xai = ai_service.analyze_document(doc_content)
     t_analysis = (time.perf_counter() - t1) * 1000
 
     analysis_res = DocumentAnalysisResponse(
@@ -156,10 +122,10 @@ async def run_benchmark(req: SandboxRunRequest):
         obligations=obligations,
         deadlines=deadlines,
         concerns=concerns,
+        xai_reasoning=xai,
     )
     doc_store.save_analysis(doc_id, analysis_res)
 
-    # Save lawyer brief & default checklist
     brief = LawyerBriefService.generate_brief(doc_content, summary, clauses, concerns, deadlines)
     doc_store.save_brief(doc_id, brief)
 
@@ -167,7 +133,6 @@ async def run_benchmark(req: SandboxRunRequest):
     checklist = generate_initial_checklist(doc_id, analysis_res)
     doc_store.save_checklist(doc_id, checklist)
 
-    # Test sample questions and measure retrieval latency
     sample_answers = []
     retrieval_latencies = []
 

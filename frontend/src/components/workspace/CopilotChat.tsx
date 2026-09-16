@@ -1,20 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  Send,
-  Sparkles,
-  ShieldCheck,
-  Bot,
-  User,
-} from 'lucide-react';
+import { Send, ShieldCheck, Bot } from 'lucide-react';
 import { GroundedAnswer } from '../../types';
-
-interface Message {
-  id: string;
-  sender: 'user' | 'assistant';
-  text?: string;
-  grounded?: GroundedAnswer;
-  isLoading?: boolean;
-}
+import { ChatMessage, ChatMessageItem } from './ChatMessageItem';
 
 interface CopilotChatProps {
   onAsk: (question: string) => Promise<GroundedAnswer>;
@@ -27,10 +14,8 @@ const STARTER_QUESTIONS = [
   'Is there an indemnification or liability cap?',
 ];
 
-export const CopilotChat: React.FC<CopilotChatProps> = ({
-  onAsk,
-}) => {
-  const [messages, setMessages] = useState<Message[]>([
+export const CopilotChat: React.FC<CopilotChatProps> = ({ onAsk }) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       sender: 'assistant',
@@ -89,25 +74,21 @@ export const CopilotChat: React.FC<CopilotChatProps> = ({
 
   return (
     <div className="h-full flex flex-col bg-slate-900/70 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-      {/* Header */}
       <div className="p-3 border-b border-slate-800 bg-slate-950/80 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-blue-600/20 text-blue-400">
+          <div className="p-1.5 rounded-lg bg-blue-600/20 text-blue-400" aria-hidden="true">
             <Bot className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="text-xs sm:text-sm font-semibold text-white">
-              Legal Copilot
-            </h2>
+            <h2 className="text-xs sm:text-sm font-semibold text-white">Legal Copilot</h2>
             <span className="text-[10px] text-emerald-400 font-medium flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3" />
+              <ShieldCheck className="w-3 h-3" aria-hidden="true" />
               Document-Grounded Mode
             </span>
           </div>
         </div>
       </div>
 
-      {/* Suggested Starter Questions */}
       <div className="p-2 border-b border-slate-800/80 bg-slate-900/40 flex items-center gap-1.5 overflow-x-auto text-xs">
         {STARTER_QUESTIONS.map((q, idx) => (
           <button
@@ -121,106 +102,13 @@ export const CopilotChat: React.FC<CopilotChatProps> = ({
         ))}
       </div>
 
-      {/* Message History */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            {msg.sender === 'assistant' && (
-              <div className="w-7 h-7 rounded-full bg-blue-900/50 border border-blue-700 flex items-center justify-center text-blue-300 shrink-0 mt-0.5">
-                <Bot className="w-4 h-4" />
-              </div>
-            )}
-
-            <div
-              className={`max-w-[85%] rounded-xl p-3.5 space-y-2.5 leading-relaxed ${
-                msg.sender === 'user'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-slate-950/80 border border-slate-800 text-slate-200'
-              }`}
-            >
-              {msg.isLoading ? (
-                <div className="flex items-center gap-2 text-slate-400">
-                  <Sparkles className="w-4 h-4 animate-spin text-blue-400" />
-                  <span>Searching document index and synthesizing evidence...</span>
-                </div>
-              ) : msg.grounded ? (
-                <div className="space-y-3">
-                  {/* 1. Direct Answer */}
-                  <div>
-                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider block mb-1">
-                      Answer:
-                    </span>
-                    <p className="text-slate-100 font-medium text-xs leading-relaxed">
-                      {msg.grounded.answer}
-                    </p>
-                  </div>
-
-                  {/* 2. Document Evidence Quotes */}
-                  {msg.grounded.document_evidence.length > 0 && (
-                    <div className="p-2.5 rounded-lg bg-slate-900 border border-slate-800 space-y-1.5">
-                      <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider block">
-                        Document Evidence:
-                      </span>
-                      {msg.grounded.document_evidence.map((ev, i) => (
-                        <div key={i} className="text-[11px] text-slate-300 font-serif italic border-l-2 border-blue-500 pl-2">
-                          "{ev.exact_excerpt}"
-                          <span className="block font-sans not-italic text-[10px] text-slate-400 mt-0.5">
-                            — Page {ev.page_number} ({ev.section_title})
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* 3. Explanation */}
-                  {msg.grounded.explanation && (
-                    <div className="text-[11px] text-slate-300">
-                      <strong className="text-slate-200">Explanation: </strong>
-                      {msg.grounded.explanation}
-                    </div>
-                  )}
-
-                  {/* 4. Uncertainty */}
-                  {msg.grounded.uncertainty && (
-                    <div className="text-[11px] text-amber-300/90 bg-amber-950/20 border border-amber-900/30 rounded p-2">
-                      <strong className="text-amber-300">Uncertainty / Limitations: </strong>
-                      {msg.grounded.uncertainty}
-                    </div>
-                  )}
-
-                  {/* 5. Recommended Next Step */}
-                  {msg.grounded.next_step && (
-                    <div className="p-2 rounded bg-purple-950/20 border border-purple-900/40 text-[11px] text-purple-200">
-                      <strong className="text-purple-300">Recommended Next Step: </strong>
-                      {msg.grounded.next_step}
-                    </div>
-                  )}
-
-                  {/* Confidence Footer */}
-                  <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-500 flex items-center justify-between">
-                    <span>Confidence: {Math.round(msg.grounded.confidence * 100)}%</span>
-                    <span>LexLens Assistive Intelligence</span>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-xs">{msg.text}</p>
-              )}
-            </div>
-
-            {msg.sender === 'user' && (
-              <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 shrink-0 mt-0.5">
-                <User className="w-4 h-4" />
-              </div>
-            )}
-          </div>
+          <ChatMessageItem key={msg.id} msg={msg} />
         ))}
         <div ref={chatEndRef} />
       </div>
 
-      {/* Input Bar */}
       <form
         onSubmit={(e) => {
           e.preventDefault();

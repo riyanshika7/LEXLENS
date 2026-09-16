@@ -12,15 +12,15 @@ def test_document_with_missing_dates_and_parties():
     content = (SAMPLE_DIR / "edge_case_no_dates.txt").read_bytes()
     doc = DocumentParser.parse_document(content, "no_dates.txt", ".txt", "edge_1")
 
-    summary, clauses, obligations, deadlines, concerns = ai_service.analyze_document(doc)
+    summary, clauses, obligations, deadlines, concerns, xai = ai_service.analyze_document(doc)
 
     assert doc.metadata.doc_id == "edge_1"
     assert len(summary.doc_type) > 0
     assert len(clauses) > 0
-    # Parties should state not explicitly named instead of crashing
     assert any("not explicitly named" in p.lower() or len(p) > 0 for p in summary.parties)
-    # Important dates should indicate no dates found
     assert any("no explicit" in d.lower() or len(d) > 0 for d in summary.important_dates)
+    assert xai is not None
+    assert len(xai.chain_of_thought) > 0
 
 
 def test_unicode_and_special_characters():
@@ -33,7 +33,8 @@ def test_unicode_and_special_characters():
         "Cualquiera de las partes puede rescindir con 30 días de preaviso."
     )
     doc = DocumentParser.parse_document(text.encode("utf-8"), "spanish_lease.txt", ".txt", "edge_es")
-    summary, clauses, obligations, deadlines, concerns = ai_service.analyze_document(doc)
+    summary, clauses, obligations, deadlines, concerns, xai = ai_service.analyze_document(doc)
 
     assert len(clauses) >= 1
     assert any("termination" in c.category.lower() or "payment" in c.category.lower() or "general" in c.category.lower() for c in clauses)
+    assert xai is not None

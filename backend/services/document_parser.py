@@ -1,23 +1,13 @@
 """Multi-format document parsing engine supporting PDF, DOCX, and TXT with robust error recovery."""
 
 import io
-import re
-import uuid
 from typing import List, Tuple
 from fastapi import HTTPException, status
 import fitz  # PyMuPDF
 import docx
 
-from backend.schemas.document import DocumentMetadata, DocumentChunk, DocumentContent
-
-
-# Heading regex patterns for legal contracts
-SECTION_HEADING_PATTERN = re.compile(
-    r"^(?:(?:SECTION|ARTICLE|CLAUSE)\s+[0-9IVXLCDM]+(?:\.[0-9]+)*[\.\:\-\s]+[A-Z\s]{3,}|"
-    r"[0-9IVXLCDM]+[\.\)]\s+[A-Z][A-Za-z0-9\s]{2,}|"
-    r"[A-Z\s]{4,}(?:\:|\.|\b))",
-    re.MULTILINE,
-)
+from backend.schemas.document import DocumentMetadata, DocumentContent
+from backend.services.chunker import chunk_document
 
 
 class DocumentParser:
@@ -34,7 +24,7 @@ class DocumentParser:
             except Exception as e:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Unable to decode text file. Ensure it is saved with UTF-8 encoding. Error: {str(e)}",
+                    detail=f"Unable to decode text file. Ensure UTF-8 encoding. Error: {str(e)}",
                 )
 
         if not text.strip():
@@ -43,7 +33,6 @@ class DocumentParser:
                 detail="The uploaded text document is completely empty or contains only whitespace.",
             )
 
-        # Approximate pages every ~3000 chars or form-feed characters
         raw_pages = text.split("\x0c") if "\x0c" in text else []
         if not raw_pages:
             lines = text.splitlines(keepends=True)
@@ -76,7 +65,7 @@ class DocumentParser:
         """Extract text from PDF using PyMuPDF with corruption & password detection."""
         try:
             doc = fitz.open(stream=content, filetype="pdf")
-        except Exception as e:
+        except Exception:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="We couldn't parse this PDF because the file structure is corrupted or unreadable. Please check the file and try again.",
@@ -102,14 +91,12 @@ class DocumentParser:
         for page_idx in range(doc.page_count):
             page = doc.load_page(page_idx)
             page_text = page.get_text("text") or ""
-            page_num = page_idx + 1
-            pages.append((page_num, page_text))
+            pages.append((page_idx + 1, page_text))
             full_text_parts.append(page_text)
 
         doc.close()
         full_text = "\n\n".join(full_text_parts).strip()
 
-        # Check for scanned PDF with zero extractable text
         if not full_text or len(full_text.strip()) < 20:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -124,7 +111,7 @@ class DocumentParser:
         try:
             doc_file = io.BytesIO(content)
             doc = docx.Document(doc_file)
-        except Exception as e:
+        except Exception:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Unable to read DOCX file. The archive may be corrupted or created with an unsupported Word format.",
@@ -132,12 +119,10 @@ class DocumentParser:
 
         full_text_parts: List[str] = []
 
-        # Extract paragraphs
         for p in doc.paragraphs:
             if p.text.strip():
                 full_text_parts.append(p.text.strip())
 
-        # Extract table cells
         for table in doc.tables:
             for row in table.rows:
                 row_text = [cell.text.strip() for cell in row.cells if cell.text.strip()]
@@ -151,7 +136,6 @@ class DocumentParser:
                 detail="The uploaded DOCX document contains no text content.",
             )
 
-        # Approximate pages (~3000 chars per page)
         pages: List[Tuple[int, str]] = []
         cur_chars = 0
         cur_paragraphs = []
@@ -170,77 +154,6 @@ class DocumentParser:
             pages.append((page_num, "\n\n".join(cur_paragraphs)))
 
         return full_text, pages
-
-    @classmethod
-    def chunk_document(cls, pages: List[Tuple[int, str]]) -> List[DocumentChunk]:
-        """
-        Segment pages into semantic chunks by section boundaries and paragraph breaks.
-        Keeps chunks between 200 and 1500 characters with section titles.
-        """
-        chunks: List[DocumentChunk] = []
-        global_char_offset = 0
-
-        for page_num, page_text in pages:
-            paragraphs = [p.strip() for p in re.split(r"\n\s*\n", page_text) if p.strip()]
-            cur_section = f"Page {page_num}"
-            cur_chunk_lines: List[str] = []
-            cur_chunk_len = 0
-
-            for para in paragraphs:
-                # Detect section heading
-                heading_match = SECTION_HEADING_PATTERN.match(para)
-                if heading_match:
-                    cur_section = para.split("\n")[0][:80].strip()
-
-                para_len = len(para)
-                if cur_chunk_len + para_len > 1200 and cur_chunk_lines:
-                    chunk_text = "\n\n".join(cur_chunk_lines)
-                    chunks.append(
-                        DocumentChunk(
-                            chunk_id=f"chunk_{page_num}_{len(chunks)+1}_{uuid.uuid4().hex[:6]}",
-                            page_number=page_num,
-                            section_title=cur_section,
-                            text=chunk_text,
-                            char_start=global_char_offset,
-                            char_end=global_char_offset + len(chunk_text),
-                        )
-                    )
-                    global_char_offset += len(chunk_text) + 2
-                    cur_chunk_lines = [para]
-                    cur_chunk_len = para_len
-                else:
-                    cur_chunk_lines.append(para)
-                    cur_chunk_len += para_len + 2
-
-            if cur_chunk_lines:
-                chunk_text = "\n\n".join(cur_chunk_lines)
-                chunks.append(
-                    DocumentChunk(
-                        chunk_id=f"chunk_{page_num}_{len(chunks)+1}_{uuid.uuid4().hex[:6]}",
-                        page_number=page_num,
-                        section_title=cur_section,
-                        text=chunk_text,
-                        char_start=global_char_offset,
-                        char_end=global_char_offset + len(chunk_text),
-                    )
-                )
-                global_char_offset += len(chunk_text) + 2
-
-        # Fallback if no chunks generated
-        if not chunks and pages:
-            fallback_text = pages[0][1]
-            chunks.append(
-                DocumentChunk(
-                    chunk_id=f"chunk_1_1_{uuid.uuid4().hex[:6]}",
-                    page_number=1,
-                    section_title="General",
-                    text=fallback_text[:1000],
-                    char_start=0,
-                    char_end=len(fallback_text[:1000]),
-                )
-            )
-
-        return chunks
 
     @classmethod
     def parse_document(
@@ -266,7 +179,7 @@ class DocumentParser:
                 detail=f"Unsupported format: {ext_clean}. Supported formats: .pdf, .docx, .txt",
             )
 
-        chunks = cls.chunk_document(pages)
+        chunks = chunk_document(pages)
         word_count = len(raw_text.split())
 
         metadata = DocumentMetadata(

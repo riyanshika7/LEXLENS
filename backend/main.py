@@ -18,7 +18,6 @@ from backend.api.sandbox import router as sandbox_router
 from backend.config import settings
 from backend.security.middleware import RateLimiterMiddleware, SecurityHeadersMiddleware
 
-# Configure structured logging
 logging.basicConfig(
     level=logging.INFO if not settings.DEBUG else logging.DEBUG,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
@@ -47,10 +46,11 @@ app = FastAPI(
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(RateLimiterMiddleware)
 
-# 2. Secure CORS Middleware
+# 2. Secure CORS Middleware (Disallowing wildcard '*', using strict origins + regex for preview builds)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=settings.parsed_cors_origins,
+    allow_origin_regex=r"^https:\/\/.*(vercel\.app|render\.com|web\.app|run\.app)$",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
@@ -100,8 +100,3 @@ async def generic_exception_handler(request: Request, exc: Exception):
             "code": "INTERNAL_SERVER_ERROR",
         },
     )
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("backend.main:app", host=settings.HOST, port=settings.PORT, reload=settings.DEBUG)

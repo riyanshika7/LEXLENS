@@ -20,7 +20,6 @@ def generate_initial_checklist(doc_id: str, analysis: DocumentAnalysisResponse) 
     """Derive actionable preparation checklist items from parsed intelligence."""
     items: list[ChecklistItem] = []
 
-    # Document-derived deadline tasks
     for d in analysis.deadlines[:3]:
         items.append(
             ChecklistItem(
@@ -33,7 +32,6 @@ def generate_initial_checklist(doc_id: str, analysis: DocumentAnalysisResponse) 
             )
         )
 
-    # Document-derived high risk / concern clauses
     for c in analysis.concerns[:3]:
         items.append(
             ChecklistItem(
@@ -46,7 +44,6 @@ def generate_initial_checklist(doc_id: str, analysis: DocumentAnalysisResponse) 
             )
         )
 
-    # General preparation guidance items
     general_tasks = [
         ("Verify correct legal names and registered business entities for all parties.", "Verification", "high"),
         ("Collect any prior agreements, email chains, or addenda referenced in this document.", "Document Collection", "medium"),
@@ -75,18 +72,13 @@ async def upload_document(
     jurisdiction_country: str = Form("United States"),
     jurisdiction_state: str = Form("General"),
 ):
-    """
-    Secure document upload and intelligence pipeline.
-    Validates file integrity, parses PDF/DOCX/TXT, indexes chunks, extracts clauses,
-    detects obligations and risks, and prepares actionable checklist and lawyer brief.
-    """
+    """Secure document upload and intelligence pipeline with resilient fallback."""
     if not file.filename:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Filename is missing from the upload request.",
         )
 
-    # Read binary content
     try:
         content = await file.read()
     except Exception as e:
@@ -95,14 +87,12 @@ async def upload_document(
             detail=f"Failed to read uploaded file: {str(e)}",
         )
 
-    # Security validation
     sanitized_name, ext = validate_file_security(
         file.filename, content, file.content_type or ""
     )
 
     doc_id = f"doc_{uuid.uuid4().hex[:10]}"
 
-    # Parse document
     doc_content = DocumentParser.parse_document(
         content=content,
         filename=sanitized_name,
@@ -112,11 +102,10 @@ async def upload_document(
         jurisdiction_state=jurisdiction_state,
     )
 
-    # Save to storage and build BM25 retriever index
     doc_store.save_document(doc_content)
 
-    # Run AI Analysis
-    summary, clauses, obligations, deadlines, concerns = ai_service.analyze_document(doc_content)
+    # Run resilient AI Analysis
+    summary, clauses, obligations, deadlines, concerns, xai = ai_service.analyze_document(doc_content)
 
     analysis_response = DocumentAnalysisResponse(
         metadata=doc_content.metadata,
@@ -125,10 +114,10 @@ async def upload_document(
         obligations=obligations,
         deadlines=deadlines,
         concerns=concerns,
+        xai_reasoning=xai,
     )
     doc_store.save_analysis(doc_id, analysis_response)
 
-    # Generate checklist & lawyer brief
     checklist_items = generate_initial_checklist(doc_id, analysis_response)
     doc_store.save_checklist(doc_id, checklist_items)
 

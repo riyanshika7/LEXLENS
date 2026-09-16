@@ -10,7 +10,28 @@ import {
   SandboxRunResponse,
 } from '../types';
 
-const API_BASE = '/api';
+/**
+ * Dynamically resolves API base URL without hardcoding localhost ports.
+ * Checks VITE_API_URL, adapts port in local dev, and defaults to window.location.origin.
+ */
+function resolveApiBase(): string {
+  const envUrl = (import.meta as any).env?.VITE_API_URL;
+  if (envUrl) {
+    const url = String(envUrl).replace(/\/$/, '');
+    return url.endsWith('/api') ? url : `${url}/api`;
+  }
+  if (typeof window !== 'undefined') {
+    const { hostname, port, origin } = window.location;
+    const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+    if (isLocalhost && (port === '5173' || port === '3000' || port === '5174')) {
+      return `http://${hostname}:8000/api`;
+    }
+    return `${origin}/api`;
+  }
+  return '/api';
+}
+
+export const API_BASE = resolveApiBase();
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {
@@ -52,6 +73,16 @@ export const api = {
   async getAnalysis(docId: string): Promise<DocumentAnalysisResponse> {
     const res = await fetch(`${API_BASE}/analysis/${docId}`);
     return handleResponse<DocumentAnalysisResponse>(res);
+  },
+
+  async getDependencyPath(docId: string, pathType: 'critical' | 'cure' = 'critical'): Promise<any> {
+    const res = await fetch(`${API_BASE}/analysis/${docId}/dependency-path?path_type=${pathType}`);
+    return handleResponse<any>(res);
+  },
+
+  async searchOffset(docId: string, offset: number): Promise<any> {
+    const res = await fetch(`${API_BASE}/analysis/${docId}/search-offset?offset=${offset}`);
+    return handleResponse<any>(res);
   },
 
   async askCopilot(

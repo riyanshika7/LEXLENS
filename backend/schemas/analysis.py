@@ -5,13 +5,30 @@ from pydantic import BaseModel, Field
 from backend.schemas.document import DocumentMetadata
 
 
+class XAIReasoning(BaseModel):
+    """Explainable AI (XAI) transparent reasoning details."""
+
+    chain_of_thought: str = Field(
+        default="",
+        description="Step-by-step reasoning explaining how provisions and risks were categorized",
+    )
+    threshold_evaluation: str = Field(
+        default="",
+        description="Quantitative and qualitative threshold evaluation used for risk scoring",
+    )
+    impact_forecast: str = Field(
+        default="",
+        description="Projected operational and financial impact for the non-lawyer signer",
+    )
+
+
 class ClauseItem(BaseModel):
     """An extracted and classified legal clause."""
 
     clause_id: str = Field(..., description="Unique clause identifier")
     category: str = Field(
         ...,
-        description="Standard legal category e.g. Termination, Liability, Payment, Confidentiality, Indemnity, Non-Compete, Governing Law, Dispute Resolution",
+        description="Standard legal category e.g. Termination, Liability, Payment, Confidentiality, Indemnity",
     )
     title: str = Field(..., description="Concise title for the clause")
     excerpt: str = Field(..., description="Verbatim text quote from the uploaded document")
@@ -134,6 +151,10 @@ class DocumentSummary(BaseModel):
         default_factory=list,
         description="Immediate practical actions the user should take",
     )
+    xai_reasoning: Optional[XAIReasoning] = Field(
+        default=None,
+        description="Explainable AI reasoning: chain-of-thought, thresholds, impact forecast",
+    )
 
 
 class DocumentAnalysisResponse(BaseModel):
@@ -145,3 +166,7 @@ class DocumentAnalysisResponse(BaseModel):
     obligations: List[ObligationItem]
     deadlines: List[DeadlineItem]
     concerns: List[PotentialConcern]
+    xai_reasoning: Optional[XAIReasoning] = Field(
+        default=None,
+        description="Consolidated Explainable AI transparency telemetry",
+    )
