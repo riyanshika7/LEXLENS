@@ -1,0 +1,52 @@
+COMMERCIAL LEASE AGREEMENT
+
+This Commercial Lease Agreement (the "Agreement") is entered into as of January 15, 2025 (the "Effective Date"), by and between HORIZON COMMERCIAL REALTY LLC, a Delaware limited liability company having its principal office at 450 Lexington Avenue, Suite 1200, New York, NY 10017 ("Landlord"), and APEX ANALYTICS INC., a Delaware corporation having its principal office at 100 Broadway, 8th Floor, New York, NY 10005 ("Tenant").
+
+WITNESSETH:
+
+SECTION 1. LEASED PREMISES
+Landlord hereby leases to Tenant, and Tenant hereby leases from Landlord, approximately 3,200 rentable square feet of office space designated as Suite 802 (the "Premises") located on the eighth (8th) floor of the commercial building located at 500 Park Avenue, New York, NY 10022 (the "Building").
+
+SECTION 2. TERM AND COMMENCEMENT
+The term of this Lease (the "Term") shall commence on March 1, 2025 (the "Commencement Date") and shall expire at 11:59 PM on February 28, 2028 (the "Expiration Date"), unless sooner terminated in accordance with the provisions hereof. Tenant shall have no option to renew or extend the Term unless agreed to in writing by Landlord at least one hundred eighty (180) days prior to the Expiration Date.
+
+SECTION 3. BASE RENT AND SECURITY DEPOSIT
+(a) Base Rent. Tenant shall pay to Landlord as monthly base rent ("Base Rent") the sum of Four Thousand Five Hundred Dollars ($4,500.00) per month. Base Rent shall be due and payable in advance on the first (1st) day of each calendar month during the Term without demand, deduction, or setoff.
+(b) Late Charge. If any installment of Base Rent is not received by Landlord within five (5) business days after the due date, Tenant shall pay a late charge equal to five percent (5%) of the overdue amount plus interest at the rate of one and one-half percent (1.5%) per month until paid in full.
+(c) Security Deposit. Concurrently with the execution of this Lease, Tenant shall deposit with Landlord the sum of Nine Thousand Dollars ($9,000.00) (the "Security Deposit") as security for the faithful performance of all Tenant covenants.
+
+SECTION 4. USE AND COMPLIANCE WITH LAWS
+Tenant shall use and occupy the Premises solely for general executive and administrative office purposes and for no other purpose without Landlord's prior written consent. Tenant shall comply promptly with all federal, state, and municipal laws, orders, and regulations affecting the Premises.
+
+SECTION 5. MAINTENANCE AND REPAIRS
+(a) Tenant Obligations. Tenant shall keep the interior of the Premises, including all fixtures, interior partitions, electrical wiring, and plumbing connections within the Premises, in good order, condition, and repair at Tenant's sole cost and expense.
+(b) Landlord Obligations. Landlord shall maintain and repair the roof, exterior walls, structural foundations, and common areas of the Building, provided that damage caused by the negligence or willful misconduct of Tenant or its invitees shall be repaired by Landlord at Tenant's sole expense.
+
+SECTION 6. INDEMNIFICATION AND LIABILITY
+Tenant agrees to defend, indemnify, and hold harmless Landlord, its members, managers, officers, agents, and employees from and against any and all claims, actions, damages, liabilities, costs, and expenses, including reasonable attorneys' fees, arising from or in connection with Tenant's possession, use, or occupancy of the Premises or any act, omission, or negligence of Tenant, its contractors, licensees, or invitees. In no event shall Landlord be liable to Tenant for any indirect, consequential, special, or punitive damages, or for any lost profits or interruption of business.
+
+SECTION 7. INSURANCE
+Tenant shall maintain at all times during the Term: (i) Commercial General Liability Insurance with a combined single limit of not less than Two Million Dollars ($2,000,000.00) per occurrence; and (ii) Property and Casualty Insurance covering all of Tenant's personal property and trade fixtures at full replacement value. Landlord shall be named as an additional insured on all liability policies.
+
+SECTION 8. DEFAULT AND TERMINATION
+Each of the following shall constitute an Event of Default by Tenant:
+(a) Failure to pay Base Rent or any other monetary sum when due, if such failure continues for ten (10) days after written notice from Landlord;
+(b) Failure to perform or observe any other non-monetary covenant, if such failure continues for thirty (30) days after written notice from Landlord;
+(c) The filing of a voluntary bankruptcy petition by Tenant or an assignment for the benefit of creditors.
+Upon the occurrence of an Event of Default, Landlord may terminate this Lease upon three (3) days' written notice, re-enter the Premises, dispossess Tenant, and recover all unpaid rent through the Expiration Date as liquidated damages.
+
+SECTION 9. SURRENDER OF PREMISES
+Upon the expiration or earlier termination of the Term, Tenant shall surrender the Premises to Landlord broom clean, in good condition and repair, reasonable wear and tear excepted. All alterations, additions, or improvements made by Tenant shall become the property of Landlord unless Landlord elects by written notice to require Tenant to remove the same at Tenant's expense.
+
+SECTION 10. GOVERNING LAW AND DISPUTE RESOLUTION
+This Agreement shall be governed by, and construed in accordance with, the laws of the State of New York, without regard to principles of conflicts of law. The parties hereby irrevocably submit to the exclusive jurisdiction of the state and federal courts located in New York County, New York, and each party irrevocably waives any right to a trial by jury in any action or proceeding arising out of or related to this Lease.
+
+IN WITNESS WHEREOF, Landlord and Tenant have executed this Commercial Lease Agreement as of the date first above written.
+
+LANDLORD:
+HORIZON COMMERCIAL REALTY LLC
+By: Marcus Vance, Managing Partner
+
+TENANT:
+APEX ANALYTICS INC.
+By: Sarah Jenkins, Chief Executive Officer

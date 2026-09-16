@@ -1,0 +1,49 @@
+INDEPENDENT CONTRACTOR AGREEMENT
+
+This Independent Contractor Agreement (the "Agreement") is dated as of February 1, 2025, by and between LUMINA HEALTH SYSTEMS INC., a California corporation located at 1200 Market Street, San Francisco, CA 94103 ("Client"), and DAVID MILLER CONSULTING, an individual residing at 452 Pinecrest Way, Berkeley, CA 94708 ("Contractor").
+
+RECITALS
+Client desires to retain Contractor to perform software development and data engineering consulting services, and Contractor agrees to perform such services on the terms and conditions set forth herein.
+
+AGREEMENT
+
+ARTICLE 1. SERVICES AND DELIVERABLES
+Contractor shall provide data pipeline engineering, API integration, and architectural advisory services as described in Statement of Work No. 1 attached hereto. Contractor shall devote reasonable business time and efforts to deliver high-quality deliverables in accordance with agreed project milestones.
+
+ARTICLE 2. COMPENSATION AND EXPENSES
+(a) Hourly Rate. Client shall compensate Contractor at the rate of One Hundred Fifty Dollars ($150.00) per hour for authorized services rendered, not to exceed forty (40) hours per week without prior written authorization.
+(b) Invoicing. Contractor shall invoice Client bi-weekly. Client shall pay undisputed invoice amounts within thirty (30) days of receipt (Net 30).
+(c) Expenses. Client shall reimburse Contractor for reasonable, pre-approved travel and out-of-pocket expenses incurred in the performance of services, provided Contractor submits itemized receipts.
+
+ARTICLE 3. INDEPENDENT CONTRACTOR STATUS
+Contractor is an independent contractor and not an employee, agent, or partner of Client. Contractor is solely responsible for paying all federal, state, and local income taxes, self-employment taxes, and disability insurance. Client shall not withhold any taxes from payments made to Contractor and shall issue an annual IRS Form 1099.
+
+ARTICLE 4. INTELLECTUAL PROPERTY AND WORK MADE FOR HIRE
+Contractor agrees that all inventions, discoveries, software code, documentation, algorithms, designs, and intellectual property developed or created by Contractor in the course of performing services hereunder (collectively, "Work Product") shall belong exclusively to Client. All Work Product shall be deemed a "work made for hire" under U.S. copyright law. To the extent any Work Product does not qualify as a work made for hire, Contractor hereby irrevocably assigns to Client all right, title, and interest in and to such Work Product.
+
+ARTICLE 5. CONFIDENTIALITY
+Contractor agrees to hold in strict confidence all proprietary technical, financial, and customer information disclosed by Client ("Confidential Information"). Contractor shall not use or disclose Confidential Information for any purpose outside the scope of this Agreement. This confidentiality obligation shall survive the expiration or termination of this Agreement for a period of five (5) years, provided that trade secrets shall remain protected indefinitely.
+
+ARTICLE 6. RESTRICTIVE COVENANTS AND NON-SOLICITATION
+During the term of this Agreement and for a period of twelve (12) months following its termination for any reason, Contractor shall not directly or indirectly solicit, induce, or encourage any employee or contractor of Client to terminate their employment or engagement with Client.
+
+ARTICLE 7. TERM AND TERMINATION
+(a) Term. This Agreement commences on February 1, 2025, and continues until December 31, 2025, unless terminated earlier.
+(b) Termination for Convenience. Either party may terminate this Agreement without cause upon thirty (30) days' prior written notice to the other party.
+(c) Termination for Cause. Either party may terminate this Agreement immediately upon written notice if the other party materially breaches any provision and fails to cure such breach within ten (10) days of written notice.
+
+ARTICLE 8. LIMITATION OF LIABILITY
+Neither party shall be liable to the other for any indirect, incidental, consequential, or punitive damages. Client's maximum aggregate liability arising out of or related to this Agreement shall be limited to the total fees actually paid to Contractor in the preceding three (3) months.
+
+ARTICLE 9. GOVERNING LAW AND ARBITRATION
+This Agreement shall be governed by the laws of the State of California. Any controversy or dispute arising out of or relating to this Agreement shall be resolved through binding confidential arbitration administered by the American Arbitration Association (AAA) in San Francisco, California. Each party waives any right to a trial by jury.
+
+IN WITNESS WHEREOF, the parties hereto have executed this Agreement.
+
+CLIENT:
+LUMINA HEALTH SYSTEMS INC.
+By: Robert Chen, VP of Engineering
+
+CONTRACTOR:
+DAVID MILLER CONSULTING
+By: David Miller, Principal Consultant

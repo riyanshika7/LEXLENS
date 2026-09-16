@@ -1,0 +1,13 @@
+TERMS OF SERVICE AND MUTUAL UNDERSTANDING
+
+GENERAL TERMS
+The parties hereby agree to collaborate on technology development and marketing efforts. Each party shall use reasonable efforts to achieve project goals.
+
+OBLIGATIONS
+Parties shall share necessary documentation and coordinate technical integration meetings as required. All information exchanged shall be kept confidential by both parties.
+
+LIABILITY
+Neither party shall be liable for indirect or consequential damages resulting from this collaboration.
+
+TERMINATION
+Either party may terminate this collaboration upon written notice if the project goals are not being met.

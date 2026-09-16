@@ -1,0 +1,31 @@
+EXECUTIVE EMPLOYMENT AGREEMENT (VERSION 1 - ORIGINAL)
+
+This Employment Agreement is dated as of January 1, 2024, by and between NEXUS CLOUD SOLUTIONS INC. (the "Company"), and JENNIFER ADAMS (the "Executive").
+
+1. POSITION AND RESPONSIBILITIES
+The Company hereby employs Executive as Senior Director of Engineering. Executive shall report directly to the Chief Technology Officer.
+
+2. COMPENSATION AND BENEFITS
+(a) Base Salary. The Company shall pay Executive an annualized base salary of $160,000.00, payable semi-monthly in accordance with standard payroll practices.
+(b) Vacation. Executive shall be entitled to three (3) weeks of paid vacation per calendar year.
+(c) Health Benefits. Executive is eligible for standard medical, dental, and vision insurance.
+
+3. TERM AND TERMINATION
+(a) At-Will Employment. Executive's employment is at-will and may be terminated by either party at any time.
+(b) Notice Period. Either party shall provide thirty (30) days' prior written notice of termination without cause.
+(c) Severance. In the event Company terminates Executive without cause, Executive shall receive two (2) months of continued base salary as severance.
+
+4. CONFIDENTIALITY
+Executive agrees to maintain the confidentiality of all Company proprietary data and trade secrets during and after employment.
+
+5. NON-SOLICITATION
+During employment and for six (6) months thereafter, Executive agrees not to solicit employees of the Company.
+
+6. GOVERNING LAW
+This Agreement is governed by the laws of the State of Washington.
+
+NEXUS CLOUD SOLUTIONS INC.
+By: Mark Thompson, CEO
+
+EXECUTIVE:
+Jennifer Adams
