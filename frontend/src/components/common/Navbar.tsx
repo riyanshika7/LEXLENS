@@ -21,9 +21,11 @@ interface NavbarProps {
   highContrast: boolean;
   fontSize: 'sm' | 'md' | 'lg';
   plainLanguageMode: boolean;
+  liveCaptionsEnabled?: boolean;
   onToggleContrast: () => void;
   onChangeFontSize: (s: 'sm' | 'md' | 'lg') => void;
   onTogglePlainLanguage: () => void;
+  onToggleLiveCaptions?: () => void;
   hasActiveDocument: boolean;
 }
 
@@ -49,9 +51,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   highContrast,
   fontSize,
   plainLanguageMode,
+  liveCaptionsEnabled = false,
   onToggleContrast,
   onChangeFontSize,
   onTogglePlainLanguage,
+  onToggleLiveCaptions,
   hasActiveDocument,
 }) => {
   const [activeSection, setActiveSection] = useState<string>('hero-section');
@@ -181,12 +185,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="hidden sm:block">
               <A11yToolbar
-                highContrast={highContrast}
-                fontSize={fontSize}
-                plainLanguageMode={plainLanguageMode}
-                onToggleContrast={onToggleContrast}
-                onChangeFontSize={onChangeFontSize}
-                onTogglePlainLanguage={onTogglePlainLanguage}
+                highContrast={highContrast} fontSize={fontSize} plainLanguageMode={plainLanguageMode}
+                liveCaptionsEnabled={liveCaptionsEnabled} onToggleContrast={onToggleContrast}
+                onChangeFontSize={onChangeFontSize} onTogglePlainLanguage={onTogglePlainLanguage}
+                onToggleLiveCaptions={onToggleLiveCaptions}
               />
             </div>
 
@@ -227,12 +229,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div className="pt-2 flex flex-col gap-2">
               <A11yToolbar
-                highContrast={highContrast}
-                fontSize={fontSize}
-                plainLanguageMode={plainLanguageMode}
-                onToggleContrast={onToggleContrast}
-                onChangeFontSize={onChangeFontSize}
-                onTogglePlainLanguage={onTogglePlainLanguage}
+                highContrast={highContrast} fontSize={fontSize} plainLanguageMode={plainLanguageMode}
+                liveCaptionsEnabled={liveCaptionsEnabled} onToggleContrast={onToggleContrast}
+                onChangeFontSize={onChangeFontSize} onTogglePlainLanguage={onTogglePlainLanguage}
+                onToggleLiveCaptions={onToggleLiveCaptions}
               />
             </div>
           </div>

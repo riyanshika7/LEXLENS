@@ -18,6 +18,8 @@ export function useWorkspaceState() {
   const [fontScale, setFontScale] = useState<FontScale>(100);
   const [fontSize, setFontSize] = useState<'sm' | 'md' | 'lg'>('md');
   const [plainLanguageMode, setPlainLanguageMode] = useState<boolean>(false);
+  const [liveCaptionsEnabled, setLiveCaptionsEnabled] = useState<boolean>(false);
+  const [latestCaptionText, setLatestCaptionText] = useState<string>('');
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState<boolean>(false);
   const [announcement, setAnnouncement] = useState<Announcement | null>(null);
 
@@ -71,6 +73,10 @@ export function useWorkspaceState() {
     cycleFontScale,
     plainLanguageMode,
     setPlainLanguageMode,
+    liveCaptionsEnabled,
+    setLiveCaptionsEnabled,
+    latestCaptionText,
+    setLatestCaptionText,
     isDisclaimerOpen,
     setIsDisclaimerOpen,
     announcement,

@@ -81,8 +81,8 @@ export const JurySandbox: React.FC<JurySandboxProps> = ({ onLoadBenchmarkIntoWor
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <label className="cursor-pointer px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-medium border border-slate-700 transition-colors flex items-center gap-1.5">
-            <span>Test Custom File</span>
-            <input type="file" onChange={handleCustomUploadTest} accept=".pdf,.docx,.txt" className="hidden" />
+            <span>Test Custom File (PDF, DOCX, TXT, CSV, SQL)</span>
+            <input type="file" onChange={handleCustomUploadTest} accept=".pdf,.docx,.txt,.csv,.sql" className="hidden" />
           </label>
 
           <button

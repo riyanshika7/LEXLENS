@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from fastapi import APIRouter
 from backend.config import settings
+from backend.services.gcp_service import gcp_service
 from backend.services.gemini_service import ai_service
 from backend.services.storage import doc_store
 
@@ -9,7 +10,7 @@ router = APIRouter(prefix="/api/health", tags=["health"])
 
 @router.get("")
 async def health_check():
-    """Health check returning system status, active models, and store diagnostics."""
+    """Health check returning system status, active models, store diagnostics, and GCP telemetry."""
     return {
         "status": "healthy",
         "app_name": settings.APP_NAME,
@@ -22,8 +23,15 @@ async def health_check():
             "live_connected": ai_service.is_live_gemini_active,
             "mode": "Live Google Gemini 2.5" if ai_service.is_live_gemini_active else "High-Precision Local Deterministic NLP",
         },
+        "gcp_integration": {
+            "project_id": gcp_service.project_id or "local-dev-fallback",
+            "gcs_bucket": gcp_service.gcs_bucket_name,
+            "secret_manager_active": bool(gcp_service.project_id),
+            "cloud_logging_active": bool(gcp_service.project_id),
+        },
         "system_metrics": {
             "active_documents": len(doc_store.documents),
             "indexed_retrievers": len(doc_store.retrievers),
         },
     }
+

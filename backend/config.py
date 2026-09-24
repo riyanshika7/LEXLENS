@@ -58,11 +58,13 @@ class Settings(BaseSettings):
 
     # File Upload Limits & Constraints
     MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB
-    ALLOWED_EXTENSIONS: List[str] = [".pdf", ".docx", ".txt"]
+    ALLOWED_EXTENSIONS: List[str] = [".pdf", ".docx", ".txt", ".csv", ".sql"]
     ALLOWED_MIME_TYPES: List[str] = [
         "application/pdf",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         "text/plain",
+        "text/csv",
+        "application/sql",
         "application/octet-stream",
     ]
 

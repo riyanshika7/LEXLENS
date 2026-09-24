@@ -4,6 +4,7 @@ import { LegalDisclaimerModal } from './components/common/LegalDisclaimerModal';
 import { LandingPage } from './components/landing/LandingPage';
 import { WorkspaceLayout } from './components/workspace/WorkspaceLayout';
 import { AccessibleAnnouncement } from './components/common/AccessibleAnnouncement';
+import { LiveCaptionOverlay } from './components/common/LiveCaptionOverlay';
 import { useWorkspaceState } from './hooks/useWorkspaceState';
 import { useDocumentWorkflow } from './hooks/useDocumentWorkflow';
 
@@ -46,6 +47,13 @@ export const App: React.FC = () => {
         />
       )}
 
+      {/* Deaf / Hard-of-Hearing Real-Time Closed Caption Overlay */}
+      <LiveCaptionOverlay
+        captionText={ws.latestCaptionText}
+        isEnabled={ws.liveCaptionsEnabled}
+        onToggle={() => ws.setLiveCaptionsEnabled(!ws.liveCaptionsEnabled)}
+      />
+
       {/* Top Header & Navigation */}
       <Navbar
         activeTab={ws.activeTab}
@@ -57,16 +65,18 @@ export const App: React.FC = () => {
         onOpenUpload={() => {
           const input = document.createElement('input');
           input.type = 'file';
-          input.accept = '.pdf,.docx,.txt';
+          input.accept = '.pdf,.docx,.txt,.csv,.sql';
           input.onchange = (e) => docFlow.handleFileUpload(e as any);
           input.click();
         }}
         highContrast={ws.highContrast}
         fontSize={ws.fontSize}
         plainLanguageMode={ws.plainLanguageMode}
+        liveCaptionsEnabled={ws.liveCaptionsEnabled}
         onToggleContrast={() => ws.setHighContrast(!ws.highContrast)}
         onChangeFontSize={ws.setFontSize}
         onTogglePlainLanguage={() => ws.setPlainLanguageMode(!ws.plainLanguageMode)}
+        onToggleLiveCaptions={() => ws.setLiveCaptionsEnabled(!ws.liveCaptionsEnabled)}
         hasActiveDocument={!!docFlow.activeAnalysis}
       />
 

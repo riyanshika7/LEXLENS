@@ -138,3 +138,17 @@ def validate_file_security(
 
     sanitized = sanitize_filename(filename)
     return sanitized, ext
+
+
+def sanitize_text_input(text: str) -> str:
+    """Sanitize user text input against XSS, script injection, and hazardous SQL patterns."""
+    if not text:
+        return ""
+    # Strip dangerous HTML/script tags and event handlers
+    cleaned = re.sub(r"(?i)<script\b[^<]*(?:(?!</script>)<[^<]*)*</script>", "", text)
+    cleaned = re.sub(r"(?i)\bon\w+\s*=\s*(?:['\"].*?['\"]|[^\s>]+)", "", cleaned)
+    cleaned = re.sub(r"(?i)javascript\s*:", "", cleaned)
+    # Neutralize dangerous SQL injection attempts in search queries
+    cleaned = re.sub(r"(?i)\b(UNION\s+SELECT|DROP\s+TABLE|ALTER\s+TABLE|DELETE\s+FROM)\b", "[filtered]", cleaned)
+    return cleaned.strip()
+

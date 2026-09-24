@@ -5,18 +5,22 @@ interface A11yToolbarProps {
   highContrast: boolean;
   fontSize: 'sm' | 'md' | 'lg';
   plainLanguageMode: boolean;
+  liveCaptionsEnabled?: boolean;
   onToggleContrast: () => void;
   onChangeFontSize: (size: 'sm' | 'md' | 'lg') => void;
   onTogglePlainLanguage: () => void;
+  onToggleLiveCaptions?: () => void;
 }
 
 export const A11yToolbar: React.FC<A11yToolbarProps> = ({
   highContrast,
   fontSize,
   plainLanguageMode,
+  liveCaptionsEnabled = false,
   onToggleContrast,
   onChangeFontSize,
   onTogglePlainLanguage,
+  onToggleLiveCaptions,
 }) => {
   return (
     <div
@@ -77,6 +81,22 @@ export const A11yToolbar: React.FC<A11yToolbarProps> = ({
         <Contrast className="w-3.5 h-3.5" />
         <span>Contrast</span>
       </button>
+
+      {/* Live Captions Toggle for Deaf / Hard of Hearing Users */}
+      {onToggleLiveCaptions && (
+        <button
+          onClick={onToggleLiveCaptions}
+          aria-label="Toggle live captions for deaf and hard-of-hearing users"
+          aria-pressed={liveCaptionsEnabled}
+          className={`flex items-center gap-1 px-2 py-1 rounded transition-colors ${
+            liveCaptionsEnabled
+              ? 'bg-[#ffea00] text-black font-bold'
+              : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+          }`}
+        >
+          <span>CC Captions</span>
+        </button>
+      )}
 
       {/* Plain Language Mode Toggle */}
       <button

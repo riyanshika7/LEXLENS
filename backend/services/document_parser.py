@@ -171,12 +171,12 @@ class DocumentParser:
             raw_text, pages = cls.parse_pdf(content, filename)
         elif ext_clean == ".docx":
             raw_text, pages = cls.parse_docx(content, filename)
-        elif ext_clean == ".txt":
+        elif ext_clean in (".txt", ".csv", ".sql"):
             raw_text, pages = cls.parse_txt(content, filename)
         else:
             raise HTTPException(
                 status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-                detail=f"Unsupported format: {ext_clean}. Supported formats: .pdf, .docx, .txt",
+                detail=f"Unsupported format: {ext_clean}. Supported formats: .pdf, .docx, .txt, .csv, .sql",
             )
 
         chunks = chunk_document(pages)
