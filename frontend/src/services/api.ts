@@ -169,6 +169,20 @@ export const api = {
     return handleResponse<SandboxRunResponse>(res);
   },
 
+  async getNavigatorSituations(): Promise<Array<{ id: string; title: string; description: string }>> {
+    const res = await fetch(`${API_BASE}/navigator/situations`);
+    return handleResponse<Array<{ id: string; title: string; description: string }>>(res);
+  },
+
+  async navigateSituation(req: import('../types').NavigatorRequest): Promise<import('../types').NavigatorResponse> {
+    const res = await fetch(`${API_BASE}/navigator/navigate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req),
+    });
+    return handleResponse<import('../types').NavigatorResponse>(res);
+  },
+
   async getHealth(): Promise<any> {
     const res = await fetch(`${API_BASE}/health`);
     return handleResponse<any>(res);

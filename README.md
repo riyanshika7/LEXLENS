@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6.svg)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC.svg)](https://tailwindcss.com/)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Tests: 41/41 Passing](https://img.shields.io/badge/Tests-41%2F41%20Passing-emerald.svg)](#testing-strategy--results)
+[![Tests: 46/46 Passing](https://img.shields.io/badge/Tests-46%2F46%20Passing-emerald.svg)](#testing-strategy--results)
 [![Coverage: 89%](https://img.shields.io/badge/Coverage-89%25-brightgreen.svg)](#testing-strategy--results)
 [![WCAG AAA](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AAA-success.svg)](#wcag-aaa-accessibility)
 [![Line Limits: Pass](https://img.shields.io/badge/Code%20Quality-%3C%20250%20Lines%2FFile-blueviolet.svg)](#architectural-modularity--line-limits)
@@ -213,6 +213,7 @@ TOTAL: 1728 Statements, 182 Missed, 89% Coverage
 
 | Challenge Requirement | Implementation in LexLens | Verified File & Module |
 | :--- | :--- | :--- |
+| **Legal Information Navigator** | Interactive 3-step legal situation router helping users select their situation, analyze missing info (Schedules/exhibits), and explore 3 informational paths. | [`legal_navigator.py`](file:///backend/services/legal_navigator.py), [`LegalNavigatorView.tsx`](file:///frontend/src/components/workspace/LegalNavigatorView.tsx) |
 | **Smart Dynamic Assistant** | Grounded Copilot providing verbatim text citations, contextual explanation, stated uncertainties, and recommended next steps. | [`gemini_service.py`](file:///backend/services/gemini_service.py), [`CopilotChat.tsx`](file:///frontend/src/components/workspace/CopilotChat.tsx) |
 | **Logical Decision-Making** | 5-part response architecture distinguishing document facts from AI interpretation and legal review. | [`chat.py`](file:///backend/schemas/chat.py), [`gemini_service.py`](file:///backend/services/gemini_service.py) |
 | **User Context & Jurisdiction** | Dynamic country and state selector prompting jurisdiction declaration before and during analysis. | [`document.py`](file:///backend/schemas/document.py), [`Navbar.tsx`](file:///frontend/src/components/common/Navbar.tsx) |

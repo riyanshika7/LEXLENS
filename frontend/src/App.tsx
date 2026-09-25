@@ -11,6 +11,9 @@ import { useDocumentWorkflow } from './hooks/useDocumentWorkflow';
 const DocumentComparisonView = React.lazy(() =>
   import('./components/workspace/DocumentComparisonView').then((m) => ({ default: m.DocumentComparisonView }))
 );
+const LegalNavigatorView = React.lazy(() =>
+  import('./components/workspace/LegalNavigatorView').then((m) => ({ default: m.LegalNavigatorView }))
+);
 const JurySandbox = React.lazy(() =>
   import('./components/workspace/JurySandbox').then((m) => ({ default: m.JurySandbox }))
 );
@@ -126,6 +129,17 @@ export const App: React.FC = () => {
                 comparison={docFlow.activeComparison}
                 onRunDemoCompare={docFlow.handleRunDemoCompare}
                 isLoading={docFlow.isComparing}
+              />
+            </div>
+          )}
+
+          {ws.activeTab === 'navigate' && (
+            <div className="flex-1 p-4">
+              <LegalNavigatorView
+                document={docFlow.activeDocument}
+                country={ws.country}
+                state={ws.state}
+                onNavigateToTab={ws.setActiveTab}
               />
             </div>
           )}

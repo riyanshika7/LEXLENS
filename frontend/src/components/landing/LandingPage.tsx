@@ -1,5 +1,6 @@
 import React from 'react';
 import { HeroSection } from './HeroSection';
+import { ChallengeAlignmentSection } from './ChallengeAlignmentSection';
 import { TrustStrip } from './TrustStrip';
 import { WorkflowSection } from './WorkflowSection';
 import { EvidenceSection } from './EvidenceSection';
@@ -15,7 +16,7 @@ interface LandingPageProps {
   onStartAnalysis: () => void;
   onSelectBenchmark: (benchmarkId: string) => void;
   onOpenDisclaimer: () => void;
-  onNavigateToTab: (tab: 'workspace' | 'compare' | 'sandbox') => void;
+  onNavigateToTab: (tab: any) => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
@@ -29,7 +30,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* 1. Hero Section & Interactive Cockpit Simulator */}
       <HeroSection onStartAnalysis={onStartAnalysis} />
 
-      {/* 2. Trust Strip & Engineering Integrity */}
+      {/* 2. Direct Challenge Alignment Primary Entry Workflows */}
+      <ChallengeAlignmentSection onStartAnalysis={onStartAnalysis} onNavigateToTab={onNavigateToTab} />
+
+      {/* 3. Trust Strip & Engineering Integrity */}
       <TrustStrip />
 
       {/* 3. Problem to Solution 4-Tier Workflow */}

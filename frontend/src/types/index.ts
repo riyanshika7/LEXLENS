@@ -205,3 +205,38 @@ export interface SandboxRunResponse {
   }>;
   system_status: string;
 }
+
+export interface InformationalPathOption {
+  title: string;
+  description: string;
+  items_to_inspect: string[];
+  questions_to_ask: string[];
+}
+
+export interface MissingInformationItem {
+  item: string;
+  why_it_matters: string;
+  suggested_action: string;
+}
+
+export interface NavigatorRequest {
+  situation: string;
+  role?: string;
+  doc_type?: string;
+  jurisdiction_country?: string;
+  jurisdiction_state?: string;
+  goal?: string;
+  doc_id?: string;
+}
+
+export interface NavigatorResponse {
+  where_you_are: string;
+  document_facts: string[];
+  ai_interpretation: string[];
+  potential_considerations: string[];
+  missing_information: MissingInformationItem[];
+  informational_paths: InformationalPathOption[];
+  questions_to_consider: string[];
+  when_to_seek_lawyer: string[];
+  jurisdiction_disclaimer: string;
+}

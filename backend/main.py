@@ -14,6 +14,7 @@ from backend.api.compare import router as compare_router
 from backend.api.documents import router as documents_router
 from backend.api.health import router as health_router
 from backend.api.lawyer_prep import router as lawyer_prep_router
+from backend.api.navigator import router as navigator_router
 from backend.api.sandbox import router as sandbox_router
 from backend.config import settings
 from backend.security.middleware import RateLimiterMiddleware, SecurityHeadersMiddleware
@@ -65,6 +66,7 @@ app.include_router(chat_router)
 app.include_router(checklist_router)
 app.include_router(compare_router)
 app.include_router(lawyer_prep_router)
+app.include_router(navigator_router)
 app.include_router(sandbox_router)
 
 # 4. Static Frontend Mounting & SPA Catch-All Route

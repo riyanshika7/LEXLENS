@@ -15,18 +15,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartAnalysis }) => 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300 font-medium mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-            <span>Next-Gen Legal Document Intelligence</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>AI LEGAL INFORMATION &amp; DOCUMENT ASSISTANCE</span>
             <span className="text-slate-600">|</span>
-            <span className="text-blue-400 font-mono">v1.0</span>
+            <span className="text-emerald-400 font-mono">FOR NON-LAWYERS</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.12] mb-6">
-            Legal documents shouldn’t require a law degree to understand.
+            Understand the document. Explore your options. Prepare your next step.
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 mb-8 leading-relaxed max-w-2xl mx-auto font-normal">
-            LexLens turns dense legal documents into clear explanations, traceable clauses, obligations, potential concerns, and practical preparation — grounded in the document itself.
+            LexLens helps non-lawyers understand legal information, navigate important provisions, compare document versions, ask document-grounded questions, and prepare for qualified legal consultations.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
@@ -35,23 +35,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartAnalysis }) => 
               className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-sm flex items-center justify-center gap-2 transition-colors"
             >
               <Upload className="w-4 h-4" />
-              <span>Analyze a Document</span>
+              <span>Understand a Document</span>
             </button>
 
             <button
               onClick={() => {
-                const el = document.getElementById('cockpit-preview');
+                const el = document.getElementById('how-lexlens-helps');
                 el?.scrollIntoView({ behavior: 'smooth' });
               }}
               className="w-full sm:w-auto px-6 py-3 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-medium rounded-lg flex items-center justify-center gap-2 transition-colors"
             >
-              <span>Explore the Legal Cockpit</span>
+              <span>Explore Legal Assistance</span>
               <ArrowRight className="w-4 h-4 text-slate-400" />
             </button>
           </div>
 
-          <p className="text-xs text-slate-500 font-mono tracking-wide">
-            Assistive AI • Document-grounded • Built for non-lawyers
+          <p className="text-xs text-slate-400 font-mono tracking-wide">
+            Built for Tenants &bull; Employees &bull; Contractors &bull; Small Business Owners
           </p>
         </div>
 

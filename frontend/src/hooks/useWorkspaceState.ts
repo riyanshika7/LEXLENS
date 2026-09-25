@@ -9,7 +9,7 @@ export interface Announcement {
 }
 
 export function useWorkspaceState() {
-  const [activeTab, setActiveTab] = useState<'workspace' | 'compare' | 'sandbox'>('workspace');
+  const [activeTab, setActiveTab] = useState<'workspace' | 'compare' | 'navigate' | 'sandbox'>('workspace');
   const [country, setCountry] = useState<string>('United States');
   const [state, setState] = useState<string>('New York');
 

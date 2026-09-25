@@ -5,14 +5,15 @@ import {
   X,
   FileText,
   GitCompare,
+  Compass,
   FlaskConical,
 } from 'lucide-react';
 import { A11yToolbar } from './A11yToolbar';
 import { JurisdictionSelector } from './JurisdictionSelector';
 
 interface NavbarProps {
-  activeTab: 'workspace' | 'compare' | 'sandbox';
-  setActiveTab: (tab: 'workspace' | 'compare' | 'sandbox') => void;
+  activeTab: 'workspace' | 'compare' | 'navigate' | 'sandbox';
+  setActiveTab: (tab: 'workspace' | 'compare' | 'navigate' | 'sandbox') => void;
   country: string;
   setCountry: (c: string) => void;
   state: string;
@@ -157,7 +158,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <FileText className="w-3.5 h-3.5" />
-                <span className="hidden md:inline">Workspace</span>
+                <span className="hidden md:inline">Understand</span>
               </button>
               <button
                 onClick={() => setActiveTab('compare')}
@@ -167,6 +168,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <GitCompare className="w-3.5 h-3.5" />
                 <span className="hidden md:inline">Compare</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('navigate')}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                  activeTab === 'navigate' ? 'bg-emerald-600 text-white font-medium' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Navigate</span>
               </button>
               <button
                 onClick={() => setActiveTab('sandbox')}
@@ -184,27 +194,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="hidden sm:block">
-              <A11yToolbar
-                highContrast={highContrast} fontSize={fontSize} plainLanguageMode={plainLanguageMode}
-                liveCaptionsEnabled={liveCaptionsEnabled} onToggleContrast={onToggleContrast}
-                onChangeFontSize={onChangeFontSize} onTogglePlainLanguage={onTogglePlainLanguage}
-                onToggleLiveCaptions={onToggleLiveCaptions}
-              />
+              <A11yToolbar highContrast={highContrast} fontSize={fontSize} plainLanguageMode={plainLanguageMode} liveCaptionsEnabled={liveCaptionsEnabled} onToggleContrast={onToggleContrast} onChangeFontSize={onChangeFontSize} onTogglePlainLanguage={onTogglePlainLanguage} onToggleLiveCaptions={onToggleLiveCaptions} />
             </div>
 
-            <button
-              onClick={onOpenUpload}
-              className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow transition-colors flex items-center gap-1.5"
-            >
+            <button onClick={onOpenUpload} className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow transition-colors flex items-center gap-1.5">
               <Upload className="w-3.5 h-3.5" />
               <span>Analyze</span>
             </button>
 
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
-              aria-label="Toggle navigation menu"
-            >
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="xl:hidden p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors" aria-label="Toggle navigation menu">
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
@@ -214,26 +212,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="xl:hidden py-3 border-t border-slate-800 space-y-2 animate-fade-in text-xs">
             <div className="grid grid-cols-2 gap-1 pb-2 border-b border-slate-800/80">
               {NAV_LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(link.href);
-                  }}
-                  className="px-3 py-2 rounded text-slate-300 hover:bg-slate-800 hover:text-white"
-                >
+                <a key={link.href} href={link.href} onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }} className="px-3 py-2 rounded text-slate-300 hover:bg-slate-800 hover:text-white">
                   {link.label}
                 </a>
               ))}
             </div>
             <div className="pt-2 flex flex-col gap-2">
-              <A11yToolbar
-                highContrast={highContrast} fontSize={fontSize} plainLanguageMode={plainLanguageMode}
-                liveCaptionsEnabled={liveCaptionsEnabled} onToggleContrast={onToggleContrast}
-                onChangeFontSize={onChangeFontSize} onTogglePlainLanguage={onTogglePlainLanguage}
-                onToggleLiveCaptions={onToggleLiveCaptions}
-              />
+              <A11yToolbar highContrast={highContrast} fontSize={fontSize} plainLanguageMode={plainLanguageMode} liveCaptionsEnabled={liveCaptionsEnabled} onToggleContrast={onToggleContrast} onChangeFontSize={onChangeFontSize} onTogglePlainLanguage={onTogglePlainLanguage} onToggleLiveCaptions={onToggleLiveCaptions} />
             </div>
           </div>
         )}
