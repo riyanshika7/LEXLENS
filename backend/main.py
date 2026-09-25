@@ -67,8 +67,38 @@ app.include_router(compare_router)
 app.include_router(lawyer_prep_router)
 app.include_router(sandbox_router)
 
+# 4. Static Frontend Mounting & SPA Catch-All Route
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
-# 4. Graceful Error Handling
+static_dist = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+if static_dist.exists():
+    if (static_dist / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=static_dist / "assets"), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        if full_path.startswith("api/") or full_path in ("docs", "redoc", "openapi.json"):
+            return JSONResponse(status_code=404, content={"detail": "Not Found"})
+        target_file = static_dist / full_path
+        if target_file.exists() and target_file.is_file():
+            return FileResponse(target_file)
+        return FileResponse(static_dist / "index.html")
+else:
+    @app.get("/")
+    async def root_status():
+        return {
+            "app": settings.APP_NAME,
+            "version": settings.APP_VERSION,
+            "status": "online",
+            "message": "LexLens API Backend is live. Access health telemetry at /api/health and interactive docs at /docs.",
+            "health": "/api/health",
+            "docs": "/docs",
+        }
+
+
+# 5. Graceful Error Handling
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Clean user-facing validation errors."""
@@ -100,3 +130,4 @@ async def generic_exception_handler(request: Request, exc: Exception):
             "code": "INTERNAL_SERVER_ERROR",
         },
     )
+
